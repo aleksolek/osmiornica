@@ -1,0 +1,8 @@
+build
+mx.scratch
+!.settings
+Drivers
+.vscode
+.settings
+CMakePresets.json
+.clangd
