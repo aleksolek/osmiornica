@@ -1,7 +1,8 @@
 /**
   ******************************************************************************
-  * @file    stm32c0xx_it.h
-  * @brief   This file contains the headers of the interrupt handlers.
+  * @file    usart.h
+  * @brief   This file contains all the function prototypes for
+  *          the usart.c file
   ******************************************************************************
   * @attention
   *
@@ -14,25 +15,24 @@
   *
   ******************************************************************************
   */
-
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32C0xx_IT_H
-#define __STM32C0xx_IT_H
+#ifndef __USART_H__
+#define __USART_H__
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void NMI_Handler(void);
-void HardFault_Handler(void);
-void SVC_Handler(void);
-void PendSV_Handler(void);
-void SysTick_Handler(void);
-void EXTI2_3_IRQHandler(void);
-void EXTI4_15_IRQHandler(void);
+/* Includes ------------------------------------------------------------------*/
+#include <stdint.h>
+
+void UART_Init(void);
+void UART_PutChar(uint8_t c);
+void UART_Write(uint8_t *data, uint32_t length);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __STM32C0xx_IT_H */
+#endif /* __USART_H__ */
+

@@ -1,7 +1,8 @@
 /**
   ******************************************************************************
-  * @file    stm32c0xx_it.h
-  * @brief   This file contains the headers of the interrupt handlers.
+  * @file    tim.h
+  * @brief   This file contains all the function prototypes for
+  *          the tim.c file
   ******************************************************************************
   * @attention
   *
@@ -14,25 +15,21 @@
   *
   ******************************************************************************
   */
-
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32C0xx_IT_H
-#define __STM32C0xx_IT_H
+#ifndef __TIM_H__
+#define __TIM_H__
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void NMI_Handler(void);
-void HardFault_Handler(void);
-void SVC_Handler(void);
-void PendSV_Handler(void);
-void SysTick_Handler(void);
-void EXTI2_3_IRQHandler(void);
-void EXTI4_15_IRQHandler(void);
+void TIM1_Init(void);
+void TIM2_Init(void);
+void TIM_SetOnTime(TIM_TypeDef *TIMx, uint32_t channel, uint32_t ton_us);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __STM32C0xx_IT_H */
+#endif /* __TIM_H__ */
+
