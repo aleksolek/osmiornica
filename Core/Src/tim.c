@@ -19,6 +19,7 @@
 #include "tim.h"
 #include "board_hal.h"
 #include "stm32c092xx.h"
+#include "stm32_assert.h"
 #include "stm32c0xx_ll_bus.h"
 #include "stm32c0xx_ll_tim.h"
 
@@ -27,6 +28,11 @@
    PSC = 11
    ARR = 19999
    fPWM = 12000000 / (20000 x 12) = 50
+   TPWM = 1/fPWM = 20ms */
+
+#define MAX_TIM_CHANNELS 4
+#define PWM_PERIOD_US 20000
+
 /* TIM1 init function */
 void TIM1_Init(void) {
 
@@ -117,6 +123,12 @@ void TIM1_Init(void) {
   GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
   GPIO_InitStruct.Alternate = LL_GPIO_AF_5;
   LL_GPIO_Init(SERVO4_PORT, &GPIO_InitStruct);
+
+  /*Enable CC channels*/
+  LL_TIM_CC_EnableChannel(TIM1, LL_TIM_CHANNEL_CH1);
+  LL_TIM_CC_EnableChannel(TIM1, LL_TIM_CHANNEL_CH2);
+  LL_TIM_CC_EnableChannel(TIM1, LL_TIM_CHANNEL_CH3);
+  LL_TIM_CC_EnableChannel(TIM1, LL_TIM_CHANNEL_CH4);
 }
 /* TIM2 init function */
 void TIM2_Init(void) {
@@ -165,26 +177,33 @@ void TIM2_Init(void) {
   GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
   GPIO_InitStruct.Alternate = LL_GPIO_AF_6;
   LL_GPIO_Init(SERVO6_PORT, &GPIO_InitStruct);
+
+  /*Enable CC channels*/
+  LL_TIM_CC_EnableChannel(TIM2, LL_TIM_CHANNEL_CH1);
+  LL_TIM_CC_EnableChannel(TIM2, LL_TIM_CHANNEL_CH2);
 }
 
 void TIM_SetOnTime(TIM_TypeDef *TIMx, uint32_t channel, uint32_t ton_us) {
-  assert_param(ton_us < 20000);
+  assert_param(ton_us <= PWM_PERIOD_US);
+  assert_param(channel >= 1 && channel <= MAX_TIM_CHANNELS);
   switch (channel) {
-    1 : LL_TIM_OC_SetCompareCH1(TIMx, ton_us);
+  case 1:
+    LL_TIM_OC_SetCompareCH1(TIMx, ton_us);
     break;
-    2 : LL_TIM_OC_SetCompareCH2(TIMx, ton_us);
+  case 2:
+    LL_TIM_OC_SetCompareCH2(TIMx, ton_us);
     break;
-    3 : LL_TIM_OC_SetCompareCH3(TIMx, ton_us);
+  case 3:
+    LL_TIM_OC_SetCompareCH3(TIMx, ton_us);
     break;
-    4 : LL_TIM_OC_SetCompareCH4(TIMx, ton_us);
-    break;
-    5 : LL_TIM_OC_SetCompareCH5(TIMx, ton_us);
+  case 4:
+    LL_TIM_OC_SetCompareCH4(TIMx, ton_us);
     break;
   default:
     assert_param(0);
   }
 }
 
-void TIM_StartChannel(TIM_TypeDef *TIMx, uint32_t channel){
-  LL_TIM_EnableCounter(TIM_TypeDef *TIMx)
-}
+void TIM_Start(TIM_TypeDef *TIMx) { LL_TIM_EnableCounter(TIMx); }
+
+void TIM_Stop(TIM_TypeDef *TIMx) { LL_TIM_DisableCounter(TIMx); }

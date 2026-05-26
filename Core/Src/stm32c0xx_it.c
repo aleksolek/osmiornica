@@ -17,6 +17,8 @@
 
 #include "stm32c0xx_it.h"
 #include "stm32c0xx_ll_exti.h"
+#include "board_hal.h"
+#include "queue.h"
 
 /******************************************************************************/
 /*           Cortex Processor Interruption and Exception Handlers          */
@@ -74,9 +76,16 @@ void SysTick_Handler(void)
   */
 void EXTI2_3_IRQHandler(void)
 {
-  if (LL_EXTI_IsActiveRisingFlag_0_31(LL_EXTI_LINE_3) != RESET)
+  /*SWITCH 1*/
+  if (LL_EXTI_IsActiveRisingFlag_0_31(SWITCH1_EXTI_LINE) != RESET)
   {
-    LL_EXTI_ClearRisingFlag_0_31(LL_EXTI_LINE_3);
+    LL_EXTI_ClearRisingFlag_0_31(SWITCH1_EXTI_LINE);
+    Queue_Add(1);
+  }
+  if (LL_EXTI_IsActiveFallingFlag_0_31(SWITCH1_EXTI_LINE) != RESET)
+  {
+    LL_EXTI_ClearFallingFlag_0_31(SWITCH1_EXTI_LINE);
+    Queue_Remove(1);
   }
 }
 
@@ -85,20 +94,51 @@ void EXTI2_3_IRQHandler(void)
   */
 void EXTI4_15_IRQHandler(void)
 {
-  if (LL_EXTI_IsActiveRisingFlag_0_31(LL_EXTI_LINE_4) != RESET)
+  /*SWITCH 2*/
+  if (LL_EXTI_IsActiveRisingFlag_0_31(SWITCH2_EXTI_LINE) != RESET)
   {
-    LL_EXTI_ClearRisingFlag_0_31(LL_EXTI_LINE_4);
+    LL_EXTI_ClearRisingFlag_0_31(SWITCH2_EXTI_LINE);
+    Queue_Add(2);
   }
-  if (LL_EXTI_IsActiveRisingFlag_0_31(LL_EXTI_LINE_6) != RESET)
+  if (LL_EXTI_IsActiveFallingFlag_0_31(SWITCH2_EXTI_LINE) != RESET)
   {
-    LL_EXTI_ClearRisingFlag_0_31(LL_EXTI_LINE_6);
+    LL_EXTI_ClearFallingFlag_0_31(SWITCH2_EXTI_LINE);
+    Queue_Remove(2);
   }
-  if (LL_EXTI_IsActiveRisingFlag_0_31(LL_EXTI_LINE_7) != RESET)
+
+  /*SWITCH 3*/
+  if (LL_EXTI_IsActiveRisingFlag_0_31(SWITCH3_EXTI_LINE) != RESET)
   {
-    LL_EXTI_ClearRisingFlag_0_31(LL_EXTI_LINE_7);
+    LL_EXTI_ClearRisingFlag_0_31(SWITCH3_EXTI_LINE);
+    Queue_Add(3);
   }
-  if (LL_EXTI_IsActiveRisingFlag_0_31(LL_EXTI_LINE_11) != RESET)
+  if (LL_EXTI_IsActiveFallingFlag_0_31(SWITCH3_EXTI_LINE) != RESET)
   {
-    LL_EXTI_ClearRisingFlag_0_31(LL_EXTI_LINE_11);
+    LL_EXTI_ClearFallingFlag_0_31(SWITCH3_EXTI_LINE);
+    Queue_Remove(3);
+  }
+
+  /*SWITCH 4*/
+  if (LL_EXTI_IsActiveRisingFlag_0_31(SWITCH4_EXTI_LINE) != RESET)
+  {
+    LL_EXTI_ClearRisingFlag_0_31(SWITCH4_EXTI_LINE);
+    Queue_Add(4);
+  }
+  if (LL_EXTI_IsActiveFallingFlag_0_31(SWITCH4_EXTI_LINE) != RESET)
+  {
+    LL_EXTI_ClearFallingFlag_0_31(SWITCH4_EXTI_LINE);
+    Queue_Remove(4);
+  }
+
+  /*SWITCH 5*/
+  if (LL_EXTI_IsActiveRisingFlag_0_31(SWITCH5_EXTI_LINE) != RESET)
+  {
+    LL_EXTI_ClearRisingFlag_0_31(SWITCH5_EXTI_LINE);
+    Queue_Add(5);
+  }
+  if (LL_EXTI_IsActiveFallingFlag_0_31(SWITCH5_EXTI_LINE) != RESET)
+  {
+    LL_EXTI_ClearFallingFlag_0_31(SWITCH5_EXTI_LINE);
+    Queue_Remove(5);
   }
 }

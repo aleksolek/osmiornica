@@ -46,12 +46,6 @@ void GPIO_Init(void)
   GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
   LL_GPIO_Init(NRST_PORT, &GPIO_InitStruct);
 
-  /*INTERRUPT PIN*/
-  GPIO_InitStruct.Pin = INTERRUPT_PIN;
-  GPIO_InitStruct.Mode = LL_GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
-  LL_GPIO_Init(INTERRUPT_PORT, &GPIO_InitStruct);
-
   /*SWITCH1*/
   EXTI_InitStruct.Line_0_31 = LL_EXTI_LINE_3;
   EXTI_InitStruct.LineCommand = ENABLE;

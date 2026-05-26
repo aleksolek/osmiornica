@@ -15,9 +15,12 @@
  ******************************************************************************
  */
 /* Includes ------------------------------------------------------------------*/
+#include <string.h>
+#include <stdio.h>
 #include "gpio.h"
 #include "tim.h"
 #include "usart.h"
+#include "servo.h"
 #include "stm32c0xx_ll_rcc.h"
 #include "stm32c0xx_ll_bus.h"
 #include "stm32c0xx_ll_utils.h"
@@ -31,7 +34,6 @@ void SystemClock_Config(void);
  */
 int main(void) {
 
-  /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick.
    */
@@ -50,10 +52,15 @@ int main(void) {
   TIM2_Init();
   UART_Init();
 
-  const uint8_t hello_message[] = "Starting program...\r\n";
-  UART_WRITE(hello_message, sizeof(hello_message));
+  uint8_t hello_message[] = "Starting program...\r\n";
+  UART_Write(hello_message, sizeof(hello_message));
+  for(uint32_t i = 1; i <= SERVOS_NUMBER; i++){
+    Servo_SetPosition(i, OPEN);
+  }
+  uint32_t currentlyHandling = 0;
   /* Infinite loop */
   while (1) {
+    
   }
 }
 
@@ -107,7 +114,7 @@ void Error_Handler(void) {
  */
 void assert_failed(uint8_t *file, uint32_t line) {
     uint8_t assert_message[256];
-    sprintf(assert_message, "Wrong parameters value: file %s on line %d\r\n", file, line);
+    sprintf(assert_message, "Wrong parameters value: file %s on line %u\r\n", file, line);
     UART_Write(assert_message, strlen(assert_message));
 }
 #endif /* USE_FULL_ASSERT */
